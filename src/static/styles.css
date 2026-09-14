@@ -107,7 +107,7 @@ section h3 {
 .participants li span {
   min-width: 0;
   overflow-wrap: anywhere;
-}
+} 
 
 .remove-participant {
   flex: 0 0 auto;
