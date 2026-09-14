@@ -99,3 +99,4 @@ async def signup_for_activity(activity_name: str, email: str):
 
     await publish_activity_update(activity_name)
     return {"message": f"Signed up {email} for {activity_name}"}
+
