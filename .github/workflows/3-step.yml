@@ -63,6 +63,7 @@ jobs:
         uses: tj-actions/changed-files@v47
         with:
           base_sha: ${{ github.event.repository.default_branch }}
+          fetch_depth: 0
           files: |
             src/static/app.js
             src/static/styles.css
