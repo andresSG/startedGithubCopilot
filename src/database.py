@@ -2,28 +2,6 @@ from pathlib import Path
 import os
 import sqlite3
 
-
-DEFAULT_ACTIVITIES = {
-    "Chess Club": {
-        "description": "Learn strategies and compete in chess tournaments",
-        "schedule": "Fridays, 3:30 PM - 5:00 PM",
-        "max_participants": 12,
-        "participants": ["michael@mergington.edu", "daniel@mergington.edu"],
-    },
-    "Programming Class": {
-        "description": "Learn programming fundamentals and build software projects",
-        "schedule": "Tuesdays and Thursdays, 3:30 PM - 4:30 PM",
-        "max_participants": 20,
-        "participants": ["emma@mergington.edu", "sophia@mergington.edu"],
-    },
-    "Gym Class": {
-        "description": "Physical education and sports activities",
-        "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
-        "max_participants": 30,
-        "participants": ["john@mergington.edu", "olivia@mergington.edu"],
-    },
-}
-
 DATABASE_PATH = Path(
     os.getenv("DATABASE_PATH", Path(__file__).parent / "activities.db")
 )
@@ -36,7 +14,7 @@ def get_connection() -> sqlite3.Connection:
     return connection
 
 
-def initialize_database() -> None:
+def initialize_database(activities: dict[str, dict]) -> None:
     DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
     with get_connection() as connection:
         connection.executescript(
@@ -63,7 +41,7 @@ def initialize_database() -> None:
         if activity_count:
             return
 
-        for name, activity in DEFAULT_ACTIVITIES.items():
+        for name, activity in activities.items():
             cursor = connection.execute(
                 """
                 INSERT INTO activities (name, description, schedule, max_participants)
@@ -133,3 +111,20 @@ def add_participant(activity_name: str, email: str) -> None:
             )
         except sqlite3.IntegrityError as error:
             raise ValueError("already_registered") from error
+
+
+def remove_participant(activity_name: str, email: str) -> None:
+    with get_connection() as connection:
+        activity = connection.execute(
+            "SELECT id FROM activities WHERE name = ?",
+            (activity_name,),
+        ).fetchone()
+        if activity is None:
+            raise KeyError("activity_not_found")
+
+        result = connection.execute(
+            "DELETE FROM participants WHERE activity_id = ? AND email = ?",
+            (activity["id"], email),
+        )
+        if result.rowcount == 0:
+            raise KeyError("participant_not_found")
