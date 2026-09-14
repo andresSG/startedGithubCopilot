@@ -76,14 +76,17 @@ section h3 {
 
 .participants {
   margin-top: 14px;
-  padding-top: 12px;
+  padding: 12px;
   border-top: 1px solid #d9e2f0;
+  border-radius: 6px;
+  background-color: #f1f5f9;
 }
 
 .participants h5 {
-  margin-bottom: 6px;
+  margin-bottom: 9px;
   color: #1a237e;
   font-size: 0.95rem;
+  font-weight: 700;
   letter-spacing: 0.02em;
 }
 
@@ -98,7 +101,17 @@ section h3 {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 4px;
+  min-height: 34px;
+  margin-bottom: 6px;
+  padding: 5px 6px 5px 10px;
+  border: 1px solid #dbe4ee;
+  border-radius: 4px;
+  background-color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.participants li span {
+  min-width: 0;
   overflow-wrap: anywhere;
 }
 
@@ -126,6 +139,8 @@ section h3 {
 }
 
 .participants .no-participants {
+  display: block;
+  padding: 8px 10px;
   color: #718096;
   font-style: italic;
 }
