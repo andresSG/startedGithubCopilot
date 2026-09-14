@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
       messageDiv.classList.remove("hidden");
       console.error("Error signing up:", error);
     }
-  });
+  }); 
 
   activitiesList.addEventListener("click", async (event) => {
     const removeButton = event.target.closest(".remove-participant");
