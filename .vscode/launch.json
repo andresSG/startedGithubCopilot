@@ -13,7 +13,11 @@
         "src.app:app",
         "--reload",
         "--reload-include",
-        "src/static/*"
+        "src/static/index.html",
+        "--reload-include",
+        "src/static/styles.css",
+        "--reload-include",
+        "src/static/app.js"
       ],
       "jinja": true
     }
