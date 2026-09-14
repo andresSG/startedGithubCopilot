@@ -111,3 +111,20 @@ def add_participant(activity_name: str, email: str) -> None:
             )
         except sqlite3.IntegrityError as error:
             raise ValueError("already_registered") from error
+
+
+def remove_participant(activity_name: str, email: str) -> None:
+    with get_connection() as connection:
+        activity = connection.execute(
+            "SELECT id FROM activities WHERE name = ?",
+            (activity_name,),
+        ).fetchone()
+        if activity is None:
+            raise KeyError("activity_not_found")
+
+        result = connection.execute(
+            "DELETE FROM participants WHERE activity_id = ? AND email = ?",
+            (activity["id"], email),
+        )
+        if result.rowcount == 0:
+            raise KeyError("participant_not_found")

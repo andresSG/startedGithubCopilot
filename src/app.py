@@ -18,6 +18,7 @@ from .database import (
     add_participant,
     get_activities as get_activities_from_database,
     initialize_database,
+    remove_participant,
 )
 
 app = FastAPI(title="Mergington High School API",
@@ -156,4 +157,17 @@ async def signup_for_activity(activity_name: str, email: str):
 
     await publish_activity_update(activity_name)
     return {"message": f"Signed up {email} for {activity_name}"}
+
+
+@app.delete("/activities/{activity_name}/participants/{email}")
+async def unregister_from_activity(activity_name: str, email: str):
+    """Unregister a student from an activity"""
+    try:
+        remove_participant(activity_name, email)
+    except KeyError as error:
+        detail = "Activity not found" if error.args[0] == "activity_not_found" else "Participant not found"
+        raise HTTPException(status_code=404, detail=detail)
+
+    await publish_activity_update(activity_name)
+    return {"message": f"Unregistered {email} from {activity_name}"}
 
